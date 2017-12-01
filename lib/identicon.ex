@@ -15,8 +15,11 @@ defmodule Identicon do
   end
 
   def draw_image(%Identicon.Image{color: color, pixel_map: pixel_map}) do
-    image = :egd.create(250, 250)
-    fill = :egd.color(color)
+    image = :egd.create(300, 300)
+    bg    = :egd.color({220, 220, 220})
+    fill  = :egd.color(color)
+
+    :egd.filledRectangle(image, {0,0}, {300, 300}, bg)
 
     Enum.each pixel_map, fn({start, stop}) ->
       :egd.filledRectangle(image, start, stop, fill)
@@ -27,8 +30,8 @@ defmodule Identicon do
 
   def build_pixel_map(%Identicon.Image{grid: grid} = image) do
     pixel_map = Enum.map grid, fn({_code, index}) ->
-      horizontal = rem(index, 5) * 50
-      vertical = div(index, 5) * 50
+      horizontal = rem(index, 5) * 50 + 25
+      vertical = div(index, 5) * 50 + 25
 
       top_left = {horizontal, vertical}
       botton_right = {horizontal + 50, vertical + 50}
